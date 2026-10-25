@@ -18,9 +18,15 @@ test("arrastrar una tarjeta a otra columna cambia su estado y persiste", async (
   await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
   await page.mouse.down();
   await page.mouse.move(b.x + b.width / 2, b.y + 100, { steps: 15 });
+
+  // Esperar a que el servidor guarde el cambio antes de recargar
+  const saved = page.waitForResponse(
+    (r) => r.url().endsWith("/api/orders/1/status") && r.request().method() === "PATCH",
+  );
   await page.mouse.up();
 
   await expect(target.getByTestId("kanban-card-1")).toBeVisible();
+  expect((await saved).ok()).toBeTruthy();
 
   // Persistencia: tras recargar sigue en la columna nueva y la API lo confirma
   await page.reload();
