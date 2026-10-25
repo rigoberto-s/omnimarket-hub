@@ -65,9 +65,19 @@ export function useUpdateOrderStatus() {
     },
     onError: (err, _vars, ctx) => {
       ctx?.previous.forEach(([key, data]) => qc.setQueryData(key, data));
-      toast.error(getErrorMessage(err, "No se pudo cambiar el estado"));
+      toast.error("No se pudo mover el pedido", { description: "Se revirtió el cambio." });
     },
-    onSuccess: (order) => toast.success(`Pedido #${order.id} actualizado`),
+    onSuccess: (order) => {
+      const labels: Record<OrderStatus, string> = {
+        pending: "Pendiente",
+        preparing: "Preparando",
+        shipped: "Enviado",
+        delivered: "Entregado",
+      };
+      toast.success("Pedido actualizado", {
+        description: `El pedido #${order.id} ahora está en ${labels[order.status]}.`,
+      });
+    },
     onSettled: () => invalidateOrders(qc),
   });
 }
