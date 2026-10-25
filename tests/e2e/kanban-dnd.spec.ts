@@ -6,7 +6,7 @@ useResetData();
 // TODO: ajusta ruta y data-testid con Judas (tarea J7).
 test("arrastrar una tarjeta a otra columna cambia su estado", async ({ page }) => {
   await loginAsTestUser(page);
-  await page.goto("/kanban"); // <- ajusta a la ruta real del Kanban
+  await page.goto("/kanban");
 
   const card = page.getByTestId("kanban-card-1");
   const target = page.getByTestId("kanban-column-preparing");

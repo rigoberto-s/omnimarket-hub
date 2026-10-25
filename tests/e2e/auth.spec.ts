@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginAsTestUser, useResetData } from "./xhelpers";
+import { loginAsTestUser, useResetData } from "./helpers";
 
 useResetData();
 

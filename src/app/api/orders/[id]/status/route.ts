@@ -3,13 +3,10 @@ import { and, count, desc, eq, ilike } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { orders, products } from "@/db/schema";
-import { orderCreateSchema } from "@/lib/schemas";
-import { buildPagination } from "@/lib/pagination"; // <- ajusta la ruta si es otra
-
-type OrderStatus = (typeof orders.$inferSelect)["status"];
+import { ORDER_STATUSES, orderCreateSchema } from "@/lib/schemas";
 
 const listQuerySchema = z.object({
-  status: z.string().optional(),
+  status: z.enum(ORDER_STATUSES).optional(),
   q: z.string().optional(),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(200).default(20),
@@ -32,8 +29,8 @@ export async function GET(req: NextRequest) {
   const { status, q, page, limit } = parsed.data;
 
   const where = and(
-    status ? eq(orders.status, status as OrderStatus) : undefined,
-    q ? ilike(orders.customerName, `%${q}%`) : undefined,
+    status ? eq(orders.status, status) : undefined,
+    q ? ilike(orders.customer, `%${q}%`) : undefined,
   );
 
   const [{ total }] = await db.select({ total: count() }).from(orders).where(where);
@@ -49,7 +46,8 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     data: rows.map((r) => ({ ...r.order, productName: r.productName })),
-    pagination: buildPagination(total, page, limit),
+    // Si Rigoberto tiene buildPagination, sustituye este objeto por buildPagination(...)
+    pagination: { page, limit, total, totalPages: Math.max(1, Math.ceil(total / limit)) },
   });
 }
 
@@ -74,12 +72,15 @@ export async function POST(req: NextRequest) {
   }
 
   // El servidor calcula los montos; nunca se confía en lo que manda el cliente.
-  const totalCents = product.priceCents * data.quantity;
-  const costCents = product.costCents * data.quantity;
-
   const [created] = await db
     .insert(orders)
-    .values({ ...data, totalCents, costCents })
+    .values({
+      customer: data.customer,
+      productId: data.productId,
+      quantity: data.quantity,
+      totalCents: product.priceCents * data.quantity,
+      costCents: product.costCents * data.quantity,
+    })
     .returning();
 
   return NextResponse.json(created, { status: 201 });
