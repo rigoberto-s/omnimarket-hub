@@ -1,10 +1,9 @@
 import {
   pgTable, pgEnum, serial, text, integer, timestamp, index,
 } from "drizzle-orm/pg-core";
+import { ORDER_STATUSES } from "../lib/schemas";
 
-export const orderStatus = pgEnum("order_status", [
-  "pending", "preparing", "shipped", "delivered",
-]);
+export const orderStatus = pgEnum("order_status", ORDER_STATUSES);
 
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
