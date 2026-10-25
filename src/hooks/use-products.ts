@@ -51,7 +51,7 @@ export function useDeleteProduct() {
     onSuccess: () => toast.success("Producto eliminado"),
     onError: (err) => {
       if (err instanceof ApiError && err.status === 409) {
-        toast.error("No se puede eliminar: el producto tiene pedidos asociados");
+        toast.error("No se pudo eliminar el producto", { description: "Tiene pedidos asociados. Elimina o reasigna esos pedidos primero." });
         return;
       }
       toast.error(getErrorMessage(err, "No se pudo eliminar el producto"));
