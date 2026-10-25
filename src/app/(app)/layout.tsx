@@ -1,9 +1,18 @@
+import { auth, signOut } from "@/auth";
 import { AppShell } from "@/components/layout/app-shell";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  // TODO: cuando exista src/auth.ts, leer el nombre con `const session = await auth()`
-  // (layout async) y pasar signOutAction con una server action que llame a signOut.
-  const userName = "Usuario";
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+  const userName = session?.user?.name ?? session?.user?.email ?? "Usuario";
 
-  return <AppShell userName={userName}>{children}</AppShell>;
+  async function signOutAction() {
+    "use server";
+    await signOut({ redirectTo: "/login" });
+  }
+
+  return (
+    <AppShell userName={userName} signOutAction={signOutAction}>
+      {children}
+    </AppShell>
+  );
 }

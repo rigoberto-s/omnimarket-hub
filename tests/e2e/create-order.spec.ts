@@ -1,18 +1,18 @@
 import { test, expect } from "@playwright/test";
-import { loginAsTestUser, useResetData } from "./helpers";
+import { loginAsTestUser, resetDataBeforeEach } from "./helpers";
 
-useResetData();
+resetDataBeforeEach();
 
-// TODO: ajusta ruta y data-testid con la lista que acuerdes con Judas (tarea J7).
-test("crear un pedido lo muestra en la lista", async ({ page }) => {
+test("crear un pedido muestra un toast y aparece en la tabla", async ({ page }) => {
   await loginAsTestUser(page);
   await page.goto("/orders");
 
-  await page.getByTestId("new-order-button").click();
-  await page.getByTestId("order-customer").fill("Cliente E2E");
-  await page.getByTestId("order-product").selectOption({ index: 1 });
-  await page.getByTestId("order-quantity").fill("2");
-  await page.getByTestId("order-submit").click();
+  await page.getByTestId("orders-new-button").click();
+  await page.getByTestId("order-form-customer").fill("Cliente E2E");
+  await page.getByTestId("order-form-product").selectOption({ index: 1 });
+  await page.getByTestId("order-form-quantity").fill("2");
+  await page.getByTestId("order-form-submit").click();
 
-  await expect(page.getByText("Cliente E2E")).toBeVisible();
+  await expect(page.getByText(/Pedido #\d+ creado/)).toBeVisible();
+  await expect(page.getByTestId("orders-table").getByText("Cliente E2E")).toBeVisible();
 });

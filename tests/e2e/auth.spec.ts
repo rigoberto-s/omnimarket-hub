@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { loginAsTestUser, useResetData } from "./helpers";
+import { loginAsTestUser, resetDataBeforeEach } from "./helpers";
 
-useResetData();
+resetDataBeforeEach();
 
 test("sin sesión, /dashboard redirige a /login", async ({ page }) => {
   await page.goto("/dashboard");
@@ -16,7 +16,7 @@ test("sin sesión, la API privada responde 401 JSON", async ({ request }) => {
 
 test("el acceso de prueba lleva al dashboard", async ({ page }) => {
   await loginAsTestUser(page);
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
 });
 
 test("con sesión, /login redirige a /dashboard", async ({ page }) => {
