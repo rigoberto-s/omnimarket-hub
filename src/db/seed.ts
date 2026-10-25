@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { ORDER_STATUSES } from "../lib/schemas";
 import { db } from "./index";
 import { orders, products } from "./schema";
 
@@ -12,8 +13,6 @@ function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-
-const STATUSES = ["pending", "preparing", "shipped", "delivered"] as const;
 
 const CUSTOMERS = [
   "Ana Torres", "Luis Hernández", "María García", "Carlos Ramírez",
@@ -72,7 +71,7 @@ export async function seedDatabase() {
         totalCents: product.priceCents * quantity,
         costCents: product.costCents * quantity,
         // Contrato del equipo: el pedido id = 1 siempre queda en "pending"
-        status: i === 0 ? ("pending" as const) : pick(STATUSES),
+        status: i === 0 ? ("pending" as const) : pick(ORDER_STATUSES),
         createdAt,
         updatedAt: createdAt,
       };
