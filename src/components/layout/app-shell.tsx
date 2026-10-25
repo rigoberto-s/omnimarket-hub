@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
@@ -18,6 +18,21 @@ export function AppShell({ userName, signOutAction, children }: AppShellProps) {
   // En escritorio el menú empieza visible; en móvil, oculto
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Escape cierra el menú móvil; si el foco estaba dentro, vuelve al botón del menú
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      const focusInside = document.getElementById(SIDEBAR_ID)?.contains(document.activeElement);
+      setMobileOpen(false);
+      if (focusInside) {
+        document.querySelector<HTMLElement>(`[aria-controls="${SIDEBAR_ID}"]`)?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
 
   function toggleSidebar() {
     if (window.matchMedia(DESKTOP_QUERY).matches) setDesktopOpen((v) => !v);

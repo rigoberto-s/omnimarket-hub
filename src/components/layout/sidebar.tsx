@@ -19,9 +19,10 @@ export function Sidebar({ id, mobileOpen, desktopOpen, onNavigate }: SidebarProp
     <aside
       id={id}
       className={cn(
-        "fixed inset-y-0 left-0 z-40 flex w-60 shrink-0 flex-col border-r bg-background transition-transform",
+        "fixed inset-y-0 left-0 z-40 flex w-60 shrink-0 flex-col border-r bg-background transition-[transform,visibility]",
         "lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
-        mobileOpen ? "translate-x-0" : "-translate-x-full",
+        // Cerrado en móvil: además de salir de pantalla, deja de ser enfocable
+        mobileOpen ? "translate-x-0" : "-translate-x-full max-lg:invisible",
         !desktopOpen && "lg:hidden",
       )}
     >
