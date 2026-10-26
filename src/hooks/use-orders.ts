@@ -82,12 +82,27 @@ export function useUpdateOrderStatus() {
   });
 }
 
+/** Optimista: cambia el estado de todos los pedidos seleccionados y revierte si falla. */
 export function useBulkUpdateOrders() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: BulkUpdateInput) => client.bulkUpdateOrders(input),
+    onMutate: async ({ ids, status }) => {
+      await qc.cancelQueries({ queryKey: orderKeys.all });
+      const previous = qc.getQueriesData<Paginated<OrderListItem>>({ queryKey: orderKeys.all });
+      const selected = new Set(ids);
+      qc.setQueriesData<Paginated<OrderListItem>>({ queryKey: orderKeys.all }, (old) =>
+        old && { ...old, data: old.data.map((o) => (selected.has(o.id) ? { ...o, status } : o)) },
+      );
+      return { previous };
+    },
+    onError: (err, _vars, ctx) => {
+      ctx?.previous.forEach(([key, data]) => qc.setQueryData(key, data));
+      toast.error(getErrorMessage(err, "No se pudieron actualizar los pedidos"), {
+        description: "Se revirtió el cambio.",
+      });
+    },
     onSuccess: ({ updated }) => toast.success(`${updated} pedidos actualizados`),
-    onError: (err) => toast.error(getErrorMessage(err, "No se pudieron actualizar los pedidos")),
     onSettled: () => invalidateOrders(qc),
   });
 }
