@@ -2,34 +2,39 @@ import { signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-/** Formas decorativas del panel de marca (solo visual). */
-function BrandShapes() {
+const RING_RADII = [290, 230, 170, 110, 50];
+
+/** Fondo del panel de marca: resplandor radial y círculos concéntricos finos (solo visual). */
+function BrandBackdrop() {
   return (
     <>
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 400 400"
-        fill="none"
-        className="pointer-events-none absolute -top-20 -right-20 size-64 lg:-top-24 lg:-right-24 lg:size-112"
-      >
-        <circle cx="250" cy="150" r="140" fill="#38BDF8" fillOpacity="0.35" />
-        <circle cx="110" cy="290" r="80" fill="#67E8F9" fillOpacity="0.25" />
-        <circle cx="200" cy="200" r="185" stroke="#FFFFFF" strokeOpacity="0.2" strokeWidth="2" />
-        <circle cx="200" cy="200" r="130" stroke="#FFFFFF" strokeOpacity="0.12" strokeWidth="2" />
-      </svg>
-
-      {/* Tarjeta abstracta con barras, solo en escritorio */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-12 bottom-36 hidden w-56 rounded-2xl border border-white/20 bg-white/10 p-5 shadow-2xl backdrop-blur-sm lg:block"
+        className="pointer-events-none absolute inset-0 bg-radial-[at_15%_10%] from-indigo-500/40 via-blue-500/10 via-35% to-transparent to-65%"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-radial-[at_95%_95%] from-violet-500/25 to-transparent to-50%"
+      />
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 600 600"
+        fill="none"
+        className="pointer-events-none absolute -right-40 -bottom-48 size-112 lg:-right-56 lg:-bottom-56 lg:size-176"
       >
-        <div className="mb-4 h-2 w-20 rounded-full bg-white/40" />
-        <div className="flex h-24 items-end gap-2.5">
-          {["h-10", "h-16", "h-12", "h-24", "h-14", "h-20"].map((h) => (
-            <div key={h} className={`flex-1 rounded-t-md bg-white/60 ${h}`} />
-          ))}
-        </div>
-      </div>
+        {RING_RADII.map((r, i) => (
+          <circle
+            key={r}
+            cx="300"
+            cy="300"
+            r={r}
+            stroke="#FFFFFF"
+            strokeOpacity={0.16 - i * 0.02}
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
     </>
   );
 }
@@ -38,20 +43,31 @@ export default function LoginPage() {
   return (
     <main className="grid min-h-screen bg-white lg:grid-cols-2">
       {/* Panel de marca: franja compacta en móvil, columna completa en escritorio */}
-      <section className="relative overflow-hidden bg-linear-to-br from-indigo-600 to-blue-600 px-6 py-8 text-white lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <BrandShapes />
+      <section className="relative overflow-hidden bg-linear-to-br from-slate-950 to-indigo-950 px-6 py-8 text-white lg:flex lg:flex-col lg:justify-between lg:p-12">
+        <BrandBackdrop />
         <div className="relative z-10 flex items-center gap-3">
           <span
-            className="flex size-10 items-center justify-center rounded-xl border border-white/30 bg-white/15"
+            className="flex size-10 items-center justify-center rounded-xl border border-white/20 bg-white/10"
             aria-hidden="true"
           >
             <span className="size-4 rounded-sm bg-white" />
           </span>
           <p className="text-2xl font-semibold tracking-tight">OmniMarket</p>
         </div>
-        <p className="relative z-10 mt-3 hidden max-w-sm text-lg leading-relaxed text-indigo-50 lg:block">
-          Ventas, pedidos, productos y Kanban en un solo panel.
-        </p>
+
+        <div className="relative z-10 mt-5 flex flex-col gap-5 lg:mt-0">
+          <p className="hidden w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[13px] font-medium text-slate-200 lg:inline-flex">
+            <span className="size-2 rounded-full bg-emerald-400" aria-hidden="true" />
+            Panel de operaciones
+          </p>
+          <p className="max-w-md text-2xl leading-tight tracking-tight lg:text-5xl">
+            <span className="font-light">
+              Tu tienda, <br />
+              en un{" "}
+            </span>
+            <span className="font-bold">solo panel</span>
+          </p>
+        </div>
       </section>
 
       <div className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-12">

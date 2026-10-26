@@ -1,35 +1,44 @@
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 
-/** Banner de bienvenida (solo visual, sin datos). El texto va sobre la zona índigo/azul 600. */
+const RING_RADII = [150, 115, 80, 45];
+
+/** Banner de bienvenida (solo visual, sin datos): azul marino con resplandor y aros finos. */
 function WelcomeBanner() {
   return (
     <section
       aria-labelledby="dashboard-banner-title"
-      className="relative overflow-hidden rounded-2xl bg-linear-to-br from-indigo-600 to-blue-600 px-6 py-7 text-white shadow-lg shadow-blue-600/20 sm:px-8"
+      className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-950 to-indigo-950 px-6 py-7 text-white shadow-lg shadow-indigo-950/20 sm:px-8"
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-radial-[at_10%_0%] from-indigo-500/35 via-blue-500/10 via-40% to-transparent to-70%"
+      />
       <svg
         aria-hidden="true"
-        viewBox="0 0 320 200"
+        viewBox="0 0 320 320"
         fill="none"
-        className="pointer-events-none absolute -right-20 -bottom-20 h-48 w-80 opacity-60 sm:top-1/2 sm:right-0 sm:bottom-auto sm:-translate-y-1/2 sm:opacity-100"
+        className="pointer-events-none absolute -right-28 -bottom-32 size-72 opacity-70 sm:top-1/2 sm:-right-16 sm:bottom-auto sm:-translate-y-1/2 sm:opacity-100"
       >
-        <circle cx="235" cy="70" r="80" fill="#38BDF8" fillOpacity="0.35" />
-        <circle cx="295" cy="170" r="55" fill="#67E8F9" fillOpacity="0.25" />
-        <circle cx="215" cy="105" r="95" stroke="#FFFFFF" strokeOpacity="0.2" strokeWidth="2" />
-        {/* Mini gráfico abstracto, solo desde sm para no tapar el texto en móvil */}
-        <g className="hidden sm:inline" fill="#FFFFFF" fillOpacity="0.5">
-          <rect x="160" y="120" width="18" height="50" rx="5" />
-          <rect x="188" y="95" width="18" height="75" rx="5" />
-          <rect x="216" y="110" width="18" height="60" rx="5" />
-          <rect x="244" y="75" width="18" height="95" rx="5" />
-        </g>
+        {RING_RADII.map((r, i) => (
+          <circle
+            key={r}
+            cx="160"
+            cy="160"
+            r={r}
+            stroke="#FFFFFF"
+            strokeOpacity={0.2 - i * 0.03}
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
       </svg>
 
       <div className="relative z-10 flex max-w-md flex-col gap-1.5">
-        <h2 id="dashboard-banner-title" className="text-2xl font-semibold tracking-tight">
-          Resumen de tu negocio
+        <h2 id="dashboard-banner-title" className="text-2xl tracking-tight sm:text-[28px]">
+          <span className="font-light">Resumen de </span>
+          <span className="font-bold">tu negocio</span>
         </h2>
-        <p className="text-sm text-indigo-50 sm:text-base">
+        <p className="text-sm text-slate-300 sm:text-base">
           Ventas, pedidos y margen de tu tienda, de un vistazo.
         </p>
       </div>
