@@ -7,7 +7,7 @@ function WelcomeBanner() {
   return (
     <section
       aria-labelledby="dashboard-banner-title"
-      className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-950 to-indigo-950 px-6 py-7 text-white shadow-lg shadow-indigo-950/20 sm:px-8"
+      className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-950 to-indigo-950 px-6 py-7 text-white shadow-lg shadow-indigo-950/20 sm:px-8 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:animation-duration-500 motion-safe:fill-mode-both"
     >
       <div
         aria-hidden="true"

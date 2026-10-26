@@ -55,7 +55,7 @@ export function RecentOrders() {
   return (
     <section
       aria-busy={isPending}
-      className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-indigo-950/5"
+      className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-indigo-950/5 transition-shadow hover:shadow-md"
     >
       <div className="flex items-start gap-3 p-5">
         <span

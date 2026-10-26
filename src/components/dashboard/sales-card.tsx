@@ -13,7 +13,7 @@ const SalesChart = dynamic(() => import("./sales-chart").then((m) => m.SalesChar
 
 function SalesCardFrame({ children }: { children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm shadow-indigo-950/5">
+    <section className="flex flex-col gap-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm shadow-indigo-950/5 transition-shadow hover:shadow-md">
       <div className="flex items-start gap-3">
         <span
           className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700"

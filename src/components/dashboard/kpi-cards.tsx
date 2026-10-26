@@ -16,6 +16,15 @@ const WHITE_CARD = "border border-zinc-200 bg-white shadow-sm shadow-indigo-950/
 // Elevación al pasar el ratón solo si el usuario no pidió reducir movimiento
 const HOVER = "transition-shadow hover:shadow-md motion-safe:transition motion-safe:hover:-translate-y-0.5";
 const ICON_TILE = "flex size-9 shrink-0 items-center justify-center rounded-xl";
+// Entrada escalonada ~60 ms; animation-delay no retrasa el hover (a diferencia de delay-*)
+const ENTER =
+  "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:animation-duration-500 motion-safe:fill-mode-both";
+const STAGGER = [
+  "motion-safe:[animation-delay:60ms]",
+  "motion-safe:[animation-delay:120ms]",
+  "motion-safe:[animation-delay:180ms]",
+  "motion-safe:[animation-delay:240ms]",
+];
 
 type Tone = "featured" | "violet" | "sky" | "emerald";
 
@@ -32,12 +41,19 @@ const TONES: Record<Tone, { card: string; label: string; hint: string; icon: str
   emerald: { card: WHITE_CARD, label: "text-zinc-600", hint: "text-zinc-600", icon: "bg-emerald-50 text-emerald-700" },
 };
 
-type KpiCardProps = { label: string; value: string; hint: string; icon: LucideIcon; tone: Tone };
+type KpiCardProps = {
+  label: string;
+  value: string;
+  hint: string;
+  icon: LucideIcon;
+  tone: Tone;
+  className?: string;
+};
 
-function KpiCard({ label, value, hint, icon: Icon, tone }: KpiCardProps) {
+function KpiCard({ label, value, hint, icon: Icon, tone, className }: KpiCardProps) {
   const t = TONES[tone];
   return (
-    <div className={cn(CARD, HOVER, t.card)}>
+    <div className={cn(CARD, HOVER, ENTER, t.card, className)}>
       <div className="flex items-start justify-between gap-3">
         <p className={cn("text-sm", t.label)}>{label}</p>
         <span className={cn(ICON_TILE, t.icon)} aria-hidden="true">
@@ -59,6 +75,7 @@ export function KpiCards({ kpis }: { kpis: Analytics["kpis"] }) {
         hint="Suma de todos los pedidos"
         icon={WalletIcon}
         tone="featured"
+        className={STAGGER[0]}
       />
       <KpiCard
         label="Pedidos"
@@ -66,6 +83,7 @@ export function KpiCards({ kpis }: { kpis: Analytics["kpis"] }) {
         hint="Pedidos registrados"
         icon={ShoppingCartIcon}
         tone="violet"
+        className={STAGGER[1]}
       />
       <KpiCard
         label="Ticket promedio"
@@ -73,6 +91,7 @@ export function KpiCards({ kpis }: { kpis: Analytics["kpis"] }) {
         hint="Total entre pedidos"
         icon={ReceiptIcon}
         tone="sky"
+        className={STAGGER[2]}
       />
       <KpiCard
         label="Margen bruto"
@@ -80,6 +99,7 @@ export function KpiCards({ kpis }: { kpis: Analytics["kpis"] }) {
         hint="Ingreso menos costo"
         icon={TrendingUpIcon}
         tone="emerald"
+        className={STAGGER[3]}
       />
     </div>
   );

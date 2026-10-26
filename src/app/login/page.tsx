@@ -20,7 +20,8 @@ function BrandBackdrop() {
         aria-hidden="true"
         viewBox="0 0 600 600"
         fill="none"
-        className="pointer-events-none absolute -right-40 -bottom-48 size-112 lg:-right-56 lg:-bottom-56 lg:size-176"
+        // Respiran: escala 0.96 ↔ 1 en un ciclo de 12 s, solo si no se pidió reducir movimiento
+        className="pointer-events-none absolute -right-40 -bottom-48 size-112 lg:-right-56 lg:-bottom-56 lg:size-176 motion-safe:animate-in motion-safe:zoom-in-[0.96] motion-safe:repeat-infinite motion-safe:direction-alternate motion-safe:animation-duration-[6s] motion-safe:ease-in-out"
       >
         {RING_RADII.map((r, i) => (
           <circle
@@ -56,11 +57,11 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10 mt-5 flex flex-col gap-5 lg:mt-0">
-          <p className="hidden w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[13px] font-medium text-slate-200 lg:inline-flex">
-            <span className="size-2 rounded-full bg-emerald-400" aria-hidden="true" />
+          <p className="hidden w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[13px] font-medium text-slate-200 lg:inline-flex motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:animation-duration-500 motion-safe:fill-mode-both">
+            <span className="size-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" aria-hidden="true" />
             Panel de operaciones
           </p>
-          <p className="max-w-md text-2xl leading-tight tracking-tight lg:text-5xl">
+          <p className="max-w-md text-2xl leading-tight tracking-tight lg:text-5xl motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:animation-duration-500 motion-safe:fill-mode-both motion-safe:[animation-delay:80ms]">
             <span className="font-light">
               Tu tienda, <br />
               en un{" "}
