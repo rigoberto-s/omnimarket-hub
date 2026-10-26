@@ -19,4 +19,5 @@ export const proxy = auth((req) => {
   }
 });
 
-export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"] };
+// /api/test/* es público: se excluye del proxy para no sumar latencia a la auditoría
+export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico|api/test/).*)"] };
