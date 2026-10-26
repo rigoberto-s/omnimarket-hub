@@ -73,9 +73,11 @@ export async function analyticsResponse(req: NextRequest) {
   try {
     const started = performance.now();
     const result = await getAnalytics(parsed.data);
+    const elapsedMs = Math.round(performance.now() - started);
+    // Server-Timing: el navegador, Postman o Bruno muestran el tiempo del servidor aparte de la red
     return NextResponse.json(
-      { ...result, elapsedMs: Math.round(performance.now() - started) },
-      { headers: { "Cache-Control": "no-store" } },
+      { ...result, elapsedMs },
+      { headers: { "Cache-Control": "no-store", "Server-Timing": `db;desc="Consultas";dur=${elapsedMs}` } },
     );
   } catch (err) {
     console.error("analytics error", err);
