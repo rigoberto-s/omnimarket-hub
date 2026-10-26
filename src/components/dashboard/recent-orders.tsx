@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ClockIcon } from "lucide-react";
 import { StatusBadge } from "@/components/orders/status-badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,11 +15,12 @@ const SKELETON_ROWS = 8;
 
 const TH = "h-10 px-3 text-left text-xs font-medium text-zinc-600 first:pl-5 last:pr-5";
 const TD = "px-3 text-sm first:pl-5 last:pr-5";
-const PAGER_BUTTON = "h-9 rounded-lg border-zinc-300 px-4 text-sm font-medium";
+const PAGER_BUTTON =
+  "h-9 rounded-lg border-zinc-300 px-4 text-sm font-medium hover:border-indigo-300 hover:text-indigo-700";
 
 function TableHeader() {
   return (
-    <thead className="bg-zinc-50">
+    <thead className="bg-linear-to-r from-zinc-50 to-indigo-50/50">
       <tr>
         <th scope="col" className={`${TH} w-16`}>ID</th>
         <th scope="col" className={TH}>Cliente</th>
@@ -53,11 +55,19 @@ export function RecentOrders() {
   return (
     <section
       aria-busy={isPending}
-      className="flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white"
+      className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-indigo-950/5 transition-shadow hover:shadow-md"
     >
-      <div className="p-5">
-        <h2 className="text-base font-semibold">Pedidos recientes</h2>
-        <p className="text-sm text-zinc-600">Los más nuevos primero.</p>
+      <div className="flex items-start gap-3 p-5">
+        <span
+          className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700"
+          aria-hidden="true"
+        >
+          <ClockIcon className="size-5" />
+        </span>
+        <div>
+          <h2 className="text-base font-semibold">Pedidos recientes</h2>
+          <p className="text-sm text-zinc-600">Los más nuevos primero.</p>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -86,7 +96,10 @@ export function RecentOrders() {
             )}
 
             {data?.data.map((order) => (
-              <tr key={order.id} className="h-13 border-b border-zinc-100">
+              <tr
+                key={order.id}
+                className="h-13 border-b border-zinc-100 transition-colors hover:bg-indigo-50/40"
+              >
                 <td className={`${TD} font-mono text-zinc-600`}>#{order.id}</td>
                 <td className={`${TD} font-medium`}>{order.customer}</td>
                 <td className={TD}>{order.productName ?? "—"}</td>
